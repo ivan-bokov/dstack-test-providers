@@ -20,7 +20,7 @@ class DockerProvider(Provider):
             working_dir=self.working_dir,
             resources=self.resources,
             artifacts=self.artifacts,
-            ports=self.ports
+            ports=[8888]
         )]
 
 
