@@ -1,0 +1,6 @@
+providers:
+    - name: docker-ports
+      image: python:3.9
+      commands:
+        - pip3 install -r providers/docker-ports/requirements.txt
+        - PYTHONPATH=providers python3 providers/docker-ports/main.py
