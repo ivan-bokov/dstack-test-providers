@@ -1,7 +1,7 @@
 from typing import List, Optional
 import sys
 
-from dstack import Provider, Job, Resources, Gpu
+from dstack import Provider, Job
 
 
 class PytorchDDPProvider(Provider):
