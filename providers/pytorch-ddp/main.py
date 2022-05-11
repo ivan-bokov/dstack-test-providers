@@ -1,4 +1,5 @@
 from typing import List
+import sys
 
 from dstack import Provider, Job
 
@@ -23,8 +24,11 @@ class PytorchDDPProvider(Provider):
             ports=self.ports
         )
         jobs = [masterJob]
-        if self.resources.nodes > 1:
-            for i in range(self.resources.nodes - 1):
+        if self.resources.get("nodes"):
+            if not str(self.resources.get("nodes")).isnumeric():
+                sys.exit("resources.nodes in workflows.yaml should be an integer")
+            nodes = int(self.resources.get("nodes"))
+            for i in range(nodes - 1):
                 jobs.append(Job(
                     image=self.image,
                     commands=self.commands,
