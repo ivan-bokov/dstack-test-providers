@@ -3,7 +3,7 @@ from typing import List
 from dstack import Provider, Job
 
 
-class DockerProvider(Provider):
+class PytorchDDPProvider(Provider):
     def __init__(self):
         super().__init__(schema="providers/pytorch-ddp/schema.yaml")
         self.image = self.workflow.data["image"]
@@ -26,7 +26,7 @@ class DockerProvider(Provider):
         if self.resources.nodes>1:
             for i in range(self.resources.nodes-1):
                 jobs.append(Job(
-            	    image_name=self.image,
+                    image_name=self.image,
             	    commands=self.commands,
             	    working_dir=self.working_dir,
             	    resources=self.resources,
@@ -37,5 +37,5 @@ class DockerProvider(Provider):
 
 
 if __name__ == '__main__':
-    provider = DockerProvider()
+    provider = PytorchDDPProvider()
     provider.start()
