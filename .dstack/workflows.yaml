@@ -1,12 +1,16 @@
 workflows:
   - name: hello
-    provider: docker
+    provider: 
+      repo: https://github.com/ivan-bokov/dstack-test-providers
+      name: pytorch-ddp
     image: ubuntu
     commands:
+      - printenv
       - mkdir -p output
       - echo 'Hello, world!' > output/hello.txt
     artifacts:
       - output
     resources:
+      nodes: 3
       cpu: 1
       memory: 1GB
