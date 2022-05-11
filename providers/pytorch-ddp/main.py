@@ -14,7 +14,7 @@ class PytorchDDPProvider(Provider):
         self.resources = self._resources()
 
     def create_jobs(self) -> List[Job]:
-	    masterJob = Job(
+        masterJob = Job(
             image_name=self.image,
             commands=self.commands,
             working_dir=self.working_dir,
@@ -23,16 +23,16 @@ class PytorchDDPProvider(Provider):
             ports=self.ports
         )
         jobs = [masterJob]
-        if self.resources.nodes>1:
-            for i in range(self.resources.nodes-1):
+        if self.resources.nodes > 1:
+            for i in range(self.resources.nodes - 1):
                 jobs.append(Job(
                     image_name=self.image,
-            	    commands=self.commands,
-            	    working_dir=self.working_dir,
-            	    resources=self.resources,
-            	    artifacts=self.artifacts,
-            	    master=masterJob
-        	))
+                    commands=self.commands,
+                    working_dir=self.working_dir,
+                    resources=self.resources,
+                    artifacts=self.artifacts,
+                    master=masterJob
+                ))
         return jobs
 
 
