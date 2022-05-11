@@ -11,7 +11,7 @@ class PytorchDDPProvider(Provider):
         self.artifacts = self.workflow.data.get("artifacts")
         self.working_dir = self.workflow.data.get("working_dir")
         self.ports = self.workflow.data.get("ports") or []
-        self.resources = self.workflow.data("resources")
+        self.resources = self.workflow.data.get("resources")
 
     def create_jobs(self) -> List[Job]:
         masterJob = Job(
