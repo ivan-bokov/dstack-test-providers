@@ -21,7 +21,7 @@ class PytorchDDPProvider(Provider):
         self.artifacts = self.workflow.data.get("artifacts")
         self.working_dir = self.workflow.data.get("working_dir")
         self.ports = self.workflow.data.get("ports") or []
-        self.resources = self.workflow.data.get("resources")
+        self.resources = self.check_resoures()
 
     def check_resoures(self) -> Optional[Resources]:
         if self.workflow.data.get("resources"):
