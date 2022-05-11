@@ -6,11 +6,7 @@ workflows:
     image: ubuntu
     commands:
       - printenv
-      - mkdir -p output
-      - echo 'Hello, world!' > output/hello.txt
     ports: [8888]
-    artifacts:
-      - output
     resources:
       nodes: 3
       cpu: 1
