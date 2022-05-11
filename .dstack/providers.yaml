@@ -1,6 +1,6 @@
 providers:
-    - name: docker-ports
+    - name: pytorch-ddp
       image: python:3.9
       commands:
-        - pip3 install -r providers/docker-ports/requirements.txt
-        - PYTHONPATH=providers python3 providers/docker-ports/main.py
+        - pip3 install -r providers/pytorch-ddp/requirements.txt
+        - PYTHONPATH=providers python3 providers/pytorch-ddp/main.py

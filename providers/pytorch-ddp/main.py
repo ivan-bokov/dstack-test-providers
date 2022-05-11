@@ -14,7 +14,7 @@ class DockerProvider(Provider):
         self.resources = self._resources()
 
     def create_jobs(self) -> List[Job]:
-	masterJob = Job(
+	    masterJob = Job(
             image_name=self.image,
             commands=self.commands,
             working_dir=self.working_dir,
