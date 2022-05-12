@@ -6,6 +6,7 @@ workflows:
     image: ubuntu
     commands:
       - printenv
+      - sleep 600
     ports: [8888]
     resources:
       nodes: 3
