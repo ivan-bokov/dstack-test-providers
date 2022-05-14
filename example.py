@@ -12,7 +12,7 @@ if __name__=='__main__':
     rank = int(os.environ['RANK'])
     local_rank = int(os.environ['LOCAL_RANK'])
     master_addr = os.environ['MASTER_ADDR']
-    master_port = os.environ['MASTER_PORT']
+    master_port = os.environ['MASTER_PORT'] or 8888
     print(f'[rank={rank}] start torch.distributed.init_process_group()')
     torch.distributed.init_process_group(backend='nccl', init_method='env://')
     print(f'[rank={rank}] finish torch.distributed.init_process_group()')

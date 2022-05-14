@@ -18,7 +18,7 @@ class PytorchDDPProvider(Provider):
     def _image(self):
         return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
 
-    def _commands(self):
+    def _commands(self, node_rank):
         commands = []
         if self.requirements:
             commands.append("pip install -r " + self.requirements)
@@ -27,8 +27,12 @@ class PytorchDDPProvider(Provider):
             for name in self.environment:
                 escaped_value = self.environment[name].replace('"', '\\"')
                 environment_init += f"{name}=\"{escaped_value}\" "
+        nproc = ""
+        if self.resources.gpu:
+            nproc = f"--nproc_per_node={self.resources.gpu}"
+        nodes = self.workflow.data["resources"].get("nodes")
         commands.append(
-            f"{environment_init}python {self.script}"
+            f"{environment_init}python -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr=$MASTER_HOSTNAME --master_port=$MASTER_PORT_MAPPING_{self.ports[0]} {self.script}"
         )
         return commands
 
@@ -41,7 +45,7 @@ class PytorchDDPProvider(Provider):
                 nodes = int(self.workflow.data["resources"]["nodes"])
         masterJob = Job(
             image=self._image(),
-            commands=self._commands(),
+            commands=self._commands(0),
             working_dir=self.working_dir,
             resources=self.resources,
             artifacts=self.artifacts,
@@ -52,7 +56,7 @@ class PytorchDDPProvider(Provider):
             for i in range(nodes - 1):
                 jobs.append(Job(
                     image=self._image(),
-                    commands=self._commands(),
+                    commands=self._commands(i+1),
                     working_dir=self.working_dir,
                     resources=self.resources,
                     artifacts=self.artifacts,
