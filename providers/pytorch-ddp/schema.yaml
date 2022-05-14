@@ -29,6 +29,4 @@ properties:
   ports:
     type: array
     items:
-      type: integer    
-required:
-  - image
+      type: integer
