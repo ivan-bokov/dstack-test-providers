@@ -8,6 +8,7 @@ import torch
 # python -m torch.distributed.launch --nproc_per_node=2 --nnodes=2 --node_rank=0 --master_addr 127.0.0.1 --master_port 23333 demo_launch.py
 # python -m torch.distributed.launch --nproc_per_node=2 --nnodes=2 --node_rank=1 --master_addr 127.0.0.1 --master_port 23333 demo_launch.py
 if __name__=='__main__':
+    print("Start torch")
     world_size = int(os.environ['WORLD_SIZE'])
     rank = int(os.environ['RANK'])
     local_rank = int(os.environ['LOCAL_RANK'])
