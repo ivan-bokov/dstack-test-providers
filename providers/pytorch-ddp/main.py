@@ -16,7 +16,8 @@ class PytorchDDPProvider(Provider):
         self.resources = self._resources()
 
     def _image(self):
-        return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
+        return "python:3.9"
+        #return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
 
     def _commands(self, node_rank):
         commands = ["printenv"]
