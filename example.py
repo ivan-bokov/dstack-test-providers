@@ -15,7 +15,7 @@ if __name__=='__main__':
     master_addr = os.environ['MASTER_ADDR']
     master_port = os.environ['MASTER_PORT'] or 8888
     print(f'[rank={rank}] start torch.distributed.init_process_group()')
-    torch.distributed.init_process_group(backend='nccl', init_method='env://')
+    torch.distributed.init_process_group(backend='gloo', init_method=f'tcp://{master_addr}:{master_port}', world_size=world_size, rank=rank)
     print(f'[rank={rank}] finish torch.distributed.init_process_group()')
     device = torch.device('cuda')
 
