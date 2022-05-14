@@ -22,7 +22,7 @@ class PytorchDDPProvider(Provider):
     def _commands(self, node_rank):
         commands = ["printenv"]
         if self.requirements:
-            commands.append("pip install -r " + self.requirements)
+            commands.append("pip3 install -r " + self.requirements)
         environment_init = ""
         if self.environment:
             for name in self.environment:
@@ -33,7 +33,7 @@ class PytorchDDPProvider(Provider):
             nproc = f"--nproc_per_node={self.resources.gpu}"
         nodes = self.workflow.data["resources"].get("nodes")
         commands.append(
-            f"{environment_init}python -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr=$MASTER_HOSTNAME --master_port=$MASTER_PORT_MAPPING_{self.ports[0]} {self.script}"
+            f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr=$MASTER_HOSTNAME --master_port=$MASTER_PORT_MAPPING_{self.ports[0]} {self.script}"
         )
         return commands
 
