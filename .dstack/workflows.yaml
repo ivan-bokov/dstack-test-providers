@@ -3,12 +3,11 @@ workflows:
     provider: 
       repo: https://github.com/ivan-bokov/dstack-test-providers
       name: pytorch-ddp
-    image: ubuntu
-    commands:
-      - printenv
-      - sleep 600
+    script: example.py
+    requirements: requirements.txt
     ports: [8888]
     resources:
       nodes: 3
       cpu: 1
       memory: 1GB
+      GPU: 1

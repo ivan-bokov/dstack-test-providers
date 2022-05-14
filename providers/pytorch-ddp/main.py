@@ -7,12 +7,30 @@ from dstack import Provider, Job
 class PytorchDDPProvider(Provider):
     def __init__(self):
         super().__init__(schema="providers/pytorch-ddp/schema.yaml")
-        self.image = self.workflow.data["image"]
-        self.commands = self.workflow.data.get("commands")
+        self.script = self.workflow.data["script"]
+        self.requirements = self.workflow.data.get("requirements")
+        self.environment = self.workflow.data.get("environment") or {}
         self.artifacts = self.workflow.data.get("artifacts")
         self.working_dir = self.workflow.data.get("working_dir")
         self.ports = self.workflow.data.get("ports") or []
         self.resources = self._resources()
+
+    def _image(self):
+        return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
+
+    def _commands(self):
+        commands = []
+        if self.requirements:
+            commands.append("pip install -r " + self.requirements)
+        environment_init = ""
+        if self.environment:
+            for name in self.environment:
+                escaped_value = self.environment[name].replace('"', '\\"')
+                environment_init += f"{name}=\"{escaped_value}\" "
+        commands.append(
+            f"{environment_init}python {self.script}"
+        )
+        return commands
 
     def create_jobs(self) -> List[Job]:
         nodes = 1
@@ -22,8 +40,8 @@ class PytorchDDPProvider(Provider):
             if int(self.workflow.data["resources"]["nodes"]) > 1:
                 nodes = int(self.workflow.data["resources"]["nodes"])
         masterJob = Job(
-            image=self.image,
-            commands=self.commands,
+            image=self._image(),
+            commands=self._commands(),
             working_dir=self.working_dir,
             resources=self.resources,
             artifacts=self.artifacts,
@@ -33,8 +51,8 @@ class PytorchDDPProvider(Provider):
         if nodes > 1:
             for i in range(nodes - 1):
                 jobs.append(Job(
-                    image=self.image,
-                    commands=self.commands,
+                    image=self._image(),
+                    commands=self._commands(),
                     working_dir=self.working_dir,
                     resources=self.resources,
                     artifacts=self.artifacts,
