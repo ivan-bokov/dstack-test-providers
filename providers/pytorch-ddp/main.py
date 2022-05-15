@@ -38,7 +38,7 @@ class PytorchDDPProvider(Provider):
             )
         else:
             commands.append(
-                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port MASTER_PORT_MAPPING_29500 {self.script}"
+                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_MAPPING_29500 {self.script}"
             )
         return commands
 
