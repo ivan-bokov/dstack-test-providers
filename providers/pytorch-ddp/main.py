@@ -28,6 +28,8 @@ class PytorchDDPProvider(Provider):
             for name in self.environment:
                 escaped_value = self.environment[name].replace('"', '\\"')
                 environment_init += f"{name}=\"{escaped_value}\" "
+        environment_init += f"RANK=\"{node_rank}\" "
+        environment_init += f"WORLD_SIZE=\"{node_rank}\" "
         nproc = ""
         if self.resources.gpu:
             nproc = f"--nproc_per_node={self.resources.gpu}"
@@ -37,6 +39,8 @@ class PytorchDDPProvider(Provider):
                 f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank=0 {self.script}"
             )
         else:
+            environment_init += f"MASTER_ADDR=$MASTER_HOSTNAME "
+            environment_init += f"MASTER_PORT=$MASTER_PORT_MAPPING_29500 "
             commands.append(
                 f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} {self.script}"
             )

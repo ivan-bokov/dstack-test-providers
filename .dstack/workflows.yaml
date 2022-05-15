@@ -5,7 +5,7 @@ workflows:
       name: pytorch-ddp
     script: example.py
     requirements: requirements.txt
-    ports: [8888]
+    ports: [29500]
     resources:
       nodes: 3
       cpu: 1
