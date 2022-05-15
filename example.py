@@ -1,21 +1,17 @@
 import os
 import torch
 
-# export NCCL_IB_HCA=mlx5_0
-# python -m torch.distributed.launch --nproc_per_node=2 --master_addr 127.0.0.1 --master_port 23333 demo_launch.py
-
-# do NOT do this with DDP, may cause dead-locak according to documentation
-# python -m torch.distributed.launch --nproc_per_node=2 --nnodes=2 --node_rank=0 --master_addr 127.0.0.1 --master_port 23333 demo_launch.py
-# python -m torch.distributed.launch --nproc_per_node=2 --nnodes=2 --node_rank=1 --master_addr 127.0.0.1 --master_port 23333 demo_launch.py
 if __name__=='__main__':
     print("Start torch")
     world_size = int(os.environ['WORLD_SIZE'])
     rank = int(os.environ['RANK'])
     local_rank = int(os.environ['LOCAL_RANK'])
     master_addr = os.environ['MASTER_ADDR']
-    master_port = os.environ['MASTER_PORT'] or 8888
+    master_port = os.environ['MASTER_PORT']
     print(f'[rank={rank}] start torch.distributed.init_process_group()')
-    torch.distributed.init_process_group(backend='gloo', init_method=f'tcp://{master_addr}:{master_port}', world_size=world_size, rank=rank)
+    method = f'tcp://{master_addr}:{master_port}'
+    print(method)
+    torch.distributed.init_process_group(backend='gloo', init_method=method, world_size=world_size, rank=rank)
     print(f'[rank={rank}] finish torch.distributed.init_process_group()')
     device = torch.device('cuda')
 

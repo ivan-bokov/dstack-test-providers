@@ -20,7 +20,7 @@ class PytorchDDPProvider(Provider):
         #return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
 
     def _commands(self, node_rank):
-        commands = ["printenv"]
+        commands = ["printenv", "echo $MASTER_HOSTNAME"]
         if self.requirements:
             commands.append("pip3 install -r " + self.requirements)
         environment_init = ""
