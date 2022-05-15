@@ -12,8 +12,8 @@ if __name__ == '__main__':
     master_addr = os.environ['MASTER_ADDR']
     master_port = os.environ['MASTER_PORT']
     print(f'[rank={rank}] start torch.distributed.init_process_group()')
-    # method = f'tcp://{master_addr}:{master_port}'
-    method = f'env://'
+    method = f'tcp://{master_addr}:{master_port}'
+    #method = f'env://'
     print(method)
     torch.distributed.init_process_group(backend='gloo', init_method=method, world_size=world_size, rank=rank)
     print(f'[rank={rank}] finish torch.distributed.init_process_group()')
