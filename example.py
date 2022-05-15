@@ -6,8 +6,8 @@ if __name__=='__main__':
     world_size = int(os.environ['WORLD_SIZE'])
     rank = int(os.environ['RANK'])
     local_rank = int(os.environ['LOCAL_RANK'])
-    master_addr = os.environ['MASTER_ADDR']
-    master_port = os.environ['MASTER_PORT']
+    master_addr = os.environ['MASTER_HOSTNAME'] or "localhost"
+    master_port = os.environ['MASTER_PORT_MAPPING_8888'] or 8888
     print(f'[rank={rank}] start torch.distributed.init_process_group()')
     method = f'tcp://{master_addr}:{master_port}'
     print(method)
