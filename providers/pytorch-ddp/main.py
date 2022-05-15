@@ -36,11 +36,11 @@ class PytorchDDPProvider(Provider):
         nodes = self.workflow.data["resources"].get("nodes")
         if node_rank == 0:
             commands.append(
-                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank=0 --use_env {self.script}"
+                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank=0 --use_env --master_addr 127.0.0.1 --master_port 29500 {self.script}"
             )
         else:
             commands.append(
-                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env {self.script}"
+                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port 23333 {self.script}"
             )
         return commands
 
