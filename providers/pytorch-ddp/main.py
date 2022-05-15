@@ -28,8 +28,6 @@ class PytorchDDPProvider(Provider):
             for name in self.environment:
                 escaped_value = self.environment[name].replace('"', '\\"')
                 environment_init += f"{name}=\"{escaped_value}\" "
-        environment_init += f"RANK=\"{node_rank}\" "
-        environment_init += f"WORLD_SIZE=\"{node_rank}\" "
         nproc = ""
         if self.resources.gpu:
             nproc = f"--nproc_per_node={self.resources.gpu}"
