@@ -15,7 +15,7 @@ if __name__ == '__main__':
     method = f'tcp://{master_addr}:{master_port}'
     #method = f'env://'
     print(method)
-    torch.distributed.init_process_group(backend='gloo', init_method=method, world_size=world_size, rank=rank)
+    torch.distributed.init_process_group(backend='c10d', init_method=method, world_size=world_size, rank=rank)
     print(f'[rank={rank}] finish torch.distributed.init_process_group()')
     device = torch.device('cpu')
 
