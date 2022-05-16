@@ -7,7 +7,7 @@ workflows:
     requirements: requirements.txt
     ports: [29500]
     resources:
-      nodes: 3
+      nodes: 2
       cpu: 1
       memory: 1GB
       gpu: 1
