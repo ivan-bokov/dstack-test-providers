@@ -17,7 +17,7 @@ if __name__ == '__main__':
     print(method)
     torch.distributed.init_process_group(backend='nccl', init_method=method, world_size=world_size, rank=rank)
     print(f'[rank={rank}] finish torch.distributed.init_process_group()')
-    device = torch.device('cpu')
+    device = torch.device('cuda')
 
     torch0 = torch.tensor(rank, device=device)
     torch.distributed.all_reduce(torch0, op=torch.distributed.ReduceOp.SUM)
