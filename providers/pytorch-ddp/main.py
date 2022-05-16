@@ -8,6 +8,7 @@ class PytorchDDPProvider(Provider):
     def __init__(self):
         super().__init__(schema="providers/pytorch-ddp/schema.yaml")
         self.script = self.workflow.data["script"]
+        self.version = str(self.workflow.data.get("version") or "3.9")
         self.requirements = self.workflow.data.get("requirements")
         self.environment = self.workflow.data.get("environment") or {}
         self.artifacts = self.workflow.data.get("artifacts")
@@ -16,8 +17,9 @@ class PytorchDDPProvider(Provider):
         self.resources = self._resources()
 
     def _image(self):
-        return "python:3.9"
-        #return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
+        cuda_is_required = self.resources and self.resources.gpu
+        return f"dstackai/python:{self.version}-cuda-11.6.0" if cuda_is_required else f"python:{self.version}"
+       #return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
 
     def _commands(self, node_rank):
         commands = ["printenv", "echo $MASTER_HOSTNAME"]
