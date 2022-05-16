@@ -13,13 +13,11 @@ class PytorchDDPProvider(Provider):
         self.environment = self.workflow.data.get("environment") or {}
         self.artifacts = self.workflow.data.get("artifacts")
         self.working_dir = self.workflow.data.get("working_dir")
-        self.ports = self.workflow.data.get("ports") or []
         self.resources = self._resources()
 
     def _image(self):
         cuda_is_required = self.resources and self.resources.gpu
         return f"dstackai/python:{self.version}-cuda-11.6.0" if cuda_is_required else f"python:{self.version}"
-       #return "pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime"
 
     def _commands(self, node_rank):
         commands = ["printenv", "echo $MASTER_HOSTNAME"]
@@ -34,14 +32,9 @@ class PytorchDDPProvider(Provider):
         if self.resources.gpu:
             nproc = f"--nproc_per_node={self.resources.gpu}"
         nodes = self.workflow.data["resources"].get("nodes")
-        if node_rank == 0:
-            commands.append(
-                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank=0 --use_env --master_addr 127.0.0.1 --master_port 29500 {self.script}"
-            )
-        else:
-            commands.append(
-                f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_MAPPING_29500 {self.script}"
-            )
+        commands.append(
+            f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_MAPPING_29500 {self.script}"
+        )
         return commands
 
     def create_jobs(self) -> List[Job]:
@@ -57,7 +50,7 @@ class PytorchDDPProvider(Provider):
             working_dir=self.working_dir,
             resources=self.resources,
             artifacts=self.artifacts,
-            ports=self.ports
+            ports=[29500]
         )
         jobs = [masterJob]
         if nodes > 1:
