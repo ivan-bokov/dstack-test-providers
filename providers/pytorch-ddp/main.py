@@ -23,18 +23,22 @@ class PytorchDDPProvider(Provider):
         commands = ["printenv", "echo $MASTER_HOSTNAME"]
         if self.requirements:
             commands.append("pip3 install -r " + self.requirements)
-        environment_init = ""
         if self.environment:
             for name in self.environment:
                 escaped_value = self.environment[name].replace('"', '\\"')
-                environment_init += f"{name}=\"{escaped_value}\" "
+                commands.append(f"export {name}=\"{escaped_value}\"")
         nproc = ""
         if self.resources.gpu:
             nproc = f"--nproc_per_node={self.resources.gpu}"
         nodes = self.workflow.data["resources"].get("nodes")
-        commands.append(
-            f"{environment_init}python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_MAPPING_29500 {self.script}"
-        )
+        if node_rank == 0:
+            commands.append(
+                f"python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port 29500 {self.script}"
+            )
+        else:
+            commands.append(
+                f"python3 -m torch.distributed.launch {nproc} --nnodes={nodes} --node_rank={node_rank} --use_env --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_MAPPING_29500 {self.script}"
+            )
         return commands
 
     def create_jobs(self) -> List[Job]:

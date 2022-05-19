@@ -4,6 +4,8 @@ workflows:
       repo: https://github.com/ivan-bokov/dstack-test-providers
       name: pytorch-ddp
     script: example.py
+    environment:
+        MASTER_FLOMASTER: true
     requirements: requirements.txt
     resources:
       nodes: 2
