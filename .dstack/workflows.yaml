@@ -9,3 +9,4 @@ workflows:
       nodes: 2
       cpu: 1
       memory: 1GB
+      gpu: 1
