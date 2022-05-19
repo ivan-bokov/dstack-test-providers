@@ -17,7 +17,7 @@ class PytorchDDPProvider(Provider):
 
     def _image(self):
         cuda_is_required = self.resources and self.resources.gpu
-        return f"dstackai/python:{self.version}-cuda-11.6.0" if cuda_is_required else f"python:{self.version}"
+        return f"dstackai/python:{self.version}-cuda-11.1.1" if cuda_is_required else f"python:{self.version}"
 
     def _commands(self, node_rank):
         commands = ["printenv", "echo $MASTER_HOSTNAME"]
