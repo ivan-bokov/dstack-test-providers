@@ -29,7 +29,7 @@ class PytorchDDPProvider(Provider):
                 commands.append(f"export {name}=\"{escaped_value}\"")
         nproc = ""
         if self.resources.gpu:
-            nproc = f"--nproc_per_node={self.resources.gpu}"
+            nproc = f"--nproc_per_node={self.resources.gpu.count}"
         nodes = self.workflow.data["resources"].get("nodes")
         if node_rank == 0:
             commands.append(
