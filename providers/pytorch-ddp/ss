@@ -1,0 +1,56 @@
+goroutine 35 [running]:runtime/debug.Stack()    /usr/local/go/src/runtime/debug/stack.go:24 +0x65gitlab.com/dstackai/dstackai-runner/pkg/runner.(*Runner).tick.func1()
+    /go/src/gitlab.com/dstackai/dstackai-runner/pkg/runner/controller.go:95 +0x58
+panic({0x1431c60, 0x21e6d80})
+    /usr/local/go/src/runtime/panic.go:838 +0x207
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.writeString({0x8, 0x8}, 0x196?)
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:265 +0x59
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildScalar({0x1363f00?, 0xc000392890?, 0x16120b9?}, 0xc000625ef0, {0x13939e5, 0x3c})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:201 +0x80a
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildAny({0x1363f00?, 0xc000392890?, 0x161ba88?}, 0xc?, {0x13939e5, 0x3c})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:71 +0x4c5
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildStruct({0x153e4a0?, 0xc000392890?, 0x1336395?}, 0x30?, {0x12e7223?, 0x13e7e40?})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:140 +0x6a5
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildAny({0x14c6120?, 0xc00063c358?, 0xc0000dc868?}, 0x48d1fa?, {0x0, 0x0})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:65 +0x47e
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildList({0x13679c0?, 0xc000625e00?, 0x16120b9?}, 0x4?, {0x7f402c3b1e78?, 0x0?})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:156 +0x98
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildAny({0x13679c0?, 0xc000625e00?, 0x161ba88?}, 0xc?, {0x13952a1, 0x3c})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:67 +0x332
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildStruct({0x1582340?, 0xc000625e00?, 0x1336395?}, 0x30?, {0x12e7223?, 0x13e7e40?})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:140 +0x6a5
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.buildAny({0x1519960?, 0xc000625e00?, 0xc0000dce30?}, 0x853105?, {0x0, 0x0})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:65 +0x47e
+github.com/aws/aws-sdk-go/private/protocol/json/jsonutil.BuildJSON({0x1519960, 0xc000625e00})
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/json/jsonutil/build.go:26 +0xda
+github.com/aws/aws-sdk-go/private/protocol/jsonrpc.Build(0xc000498500)
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/private/protocol/jsonrpc/jsonrpc.go:43 +0x69
+github.com/aws/aws-sdk-go/aws/request.(*HandlerList).Run(0xc0004986a8, 0xc000498500)
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/aws/request/handlers.go:267 +0x9a
+github.com/aws/aws-sdk-go/aws/request.(*Request).Build(0xc000498500)
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/aws/request/request.go:405 +0x65
+github.com/aws/aws-sdk-go/aws/request.(*Request).Sign(0xc000498500)
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/aws/request/request.go:421 +0x25
+github.com/aws/aws-sdk-go/aws/request.(*Request).Send(0xc000498500)
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/aws/request/request.go:526 +0x132
+github.com/aws/aws-sdk-go/service/cloudwatchlogs.(*CloudWatchLogs).PutLogEvents(0x8?, 0x7f4054e8ef18?)
+    /go/pkg/mod/github.com/aws/aws-sdk-go@v1.38.7/service/cloudwatchlogs/api.go:3404 +0x25
+gitlab.com/dstackai/dstackai-runner/logs.(*CloudWatchLog).putLogEvents(0xc0004eabc0, {{}, {0xc00063c358, 0x1, 0x1}, 0xc0004eabc8, 0xc000393370, 0x0})
+    /go/src/gitlab.com/dstackai/dstackai-runner/logs/cloudwatch.go:169 +0xb2
+gitlab.com/dstackai/dstackai-runner/logs.(*CloudWatchLog).sendLogsToCloudwatch(0xc0004eabc0, {0xc0005ff500, 0x910})
+    /go/src/gitlab.com/dstackai/dstackai-runner/logs/cloudwatch.go:162 +0x2af
+gitlab.com/dstackai/dstackai-runner/logs.CloudWatchLog.Write({0xc0007143e8, {0xc0007173e0, 0xa}, {0xc0006d01b0, 0x14}, {0x0, 0x0}, 0x0}, {0xc00016f600, 0x82c, ...})
+    /go/src/gitlab.com/dstackai/dstackai-runner/logs/cloudwatch.go:266 +0x1c7
+gitlab.com/dstackai/dstackai-runner/pkg/log.writeCloud({0x16126d2?, 0x2?}, {0xc00016e400, 0x825})
+    /go/src/gitlab.com/dstackai/dstackai-runner/pkg/log/log.go:112 +0xf5
+gitlab.com/dstackai/dstackai-runner/pkg/log.Trace({0x18cd298?, 0xc0004577c0?}, {0x161c66b, 0xd}, {0xc000543660, 0x2, 0x2})
+    /go/src/gitlab.com/dstackai/dstackai-runner/pkg/log/log.go:55 +0x145
+gitlab.com/dstackai/dstackai-runner/pkg/api.(*Http).Ping(0xc00014e000, {0x18cd298, 0xc0004577c0})
+    /go/src/gitlab.com/dstackai/dstackai-runner/pkg/api/http.go:86 +0x65b
+gitlab.com/dstackai/dstackai-runner/pkg/runner.(*Runner).tick(0xc0004a7d40, {0x18cd298, 0xc0004577c0})
+    /go/src/gitlab.com/dstackai/dstackai-runner/pkg/runner/controller.go:98 +0xbd
+gitlab.com/dstackai/dstackai-runner/pkg/runner.(*Runner).Run(0xc0004a7d40, {0x18cd298, 0xc0004577c0})
+    /go/src/gitlab.com/dstackai/dstackai-runner/pkg/runner/controller.go:80 +0x127
+main.start.func1()
+    /go/src/gitlab.com/dstackai/dstackai-runner/main.go:63 +0x3b
+created by main.start
+    /go/src/gitlab.com/dstackai/dstackai-runner/main.go:62 +0x552
