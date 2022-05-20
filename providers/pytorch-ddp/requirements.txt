@@ -3,4 +3,3 @@ pyyaml
 jsonschema
 dstack
 torch
-numpy
