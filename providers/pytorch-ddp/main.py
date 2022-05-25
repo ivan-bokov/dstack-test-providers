@@ -32,14 +32,9 @@ class PytorchDDPProvider(Provider):
         if self.resources.gpu:
             nproc = f"--nproc_per_node={self.resources.gpu.count}"
         nodes = self.workflow.data["resources"].get("nodes")
-        if node_rank == 0:
-            commands.append(
-                f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port 29500 {self.script}"
-            )
-        else:
-            commands.append(
-                f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_MAPPING_29500 {self.script}"
-            )
+        commands.append(
+            f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+        )
         return commands
 
     def create_jobs(self) -> List[Job]:
