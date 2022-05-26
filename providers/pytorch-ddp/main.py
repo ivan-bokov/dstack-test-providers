@@ -33,7 +33,7 @@ class PytorchDDPProvider(Provider):
             nproc = f"--nproc_per_node={self.resources.gpu.count}"
         nodes = self.workflow.data["resources"].get("nodes")
         commands.append(
-            f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+            f"torchrun {nproc} --max_restarts=3 --nnodes=1:{nodes} --node_rank={node_rank} --rdzv_id=$JOB_ID --rdzv_backend=c10d --rdzv_endpoint=$MASTER_HOSTNAME:$MASTER_PORT_0 {self.script}" #--master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
         )
         return commands
 
