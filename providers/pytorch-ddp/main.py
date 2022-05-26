@@ -34,11 +34,11 @@ class PytorchDDPProvider(Provider):
         nodes = self.workflow.data["resources"].get("nodes")
         if node_rank == 0:
             commands.append(
-                f"torchrun {nproc} --max_restarts=3 --nnodes=1:{nodes} --node_rank={node_rank} --rdzv_id=$MASTER_JOB_ID --rdzv_backend=c10d --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --rdzv_id=$MASTER_JOB_ID --rdzv_backend=c10d --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
             )
         else:
             commands.append(
-                f"torchrun {nproc} --max_restarts=3 --nnodes=1:{nodes} --node_rank={node_rank} --rdzv_id=$MASTER_JOB_ID --rdzv_backend=c10d --rdzv_endpoint=$MASTER_HOST_NODE_ADDR_0 --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --rdzv_id=$MASTER_JOB_ID --rdzv_backend=c10d --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
                 # --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
             )
         return commands
