@@ -46,7 +46,9 @@ def demo_basic(local_world_size, local_rank):
     labels = torch.randn(20, 5).to(device_ids[0])
     loss_fn(outputs, labels).backward()
     optimizer.step()
-
+    print(
+        f"[{os.getpid()}] THE END"
+    )
 
 def spmd_main(local_world_size, local_rank):
     # These are the parameters used to initialize the process group
