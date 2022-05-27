@@ -36,14 +36,21 @@ def demo_basic(local_world_size, local_rank):
     )
 
     model = ToyModel().cuda(device_ids[0])
+    print(f"[{os.getpid()}] model {model}")
     ddp_model = DDP(model, device_ids)
+    print(f"[{os.getpid()}] ddp_model {ddp_model}")
 
     loss_fn = nn.MSELoss()
+    print(f"[{os.getpid()}] loss_fn {loss_fn}")
     optimizer = optim.SGD(ddp_model.parameters(), lr=0.001)
+    print(f"[{os.getpid()}] optimizer {optimizer}")
 
     optimizer.zero_grad()
+    print(f"[{os.getpid()}] optimizer.zero_grad() {optimizer}")
     outputs = ddp_model(torch.randn(20, 10))
+    print(f"[{os.getpid()}] outputs {outputs}")
     labels = torch.randn(20, 5).to(device_ids[0])
+    print(f"[{os.getpid()}] labels {labels}")
     loss_fn(outputs, labels).backward()
     optimizer.step()
     print(
