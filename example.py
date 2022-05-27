@@ -8,6 +8,7 @@ import torch
 import torch.distributed as dist
 import torch.nn as nn
 import torch.optim as optim
+from torch.distributed.elastic.multiprocessing.errors import record
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
@@ -22,6 +23,7 @@ class ToyModel(nn.Module):
         return self.net2(self.relu(self.net1(x)))
 
 
+@record
 def demo_basic(local_world_size, local_rank):
 
     # setup devices for this process. For local_world_size = 2, num_gpus = 8,
