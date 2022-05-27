@@ -138,10 +138,6 @@ def demo_model_parallel(rank, world_size):
 
 
 if __name__ == "__main__":
-    n_gpus = torch.cuda.device_count()
-    if n_gpus < 8:
-        print(f"Requires at least 8 GPUs to run, but got {n_gpus}.")
-    else:
-        run_demo(demo_basic, 8)
-        run_demo(demo_checkpoint, 8)
-        run_demo(demo_model_parallel, 4)
+     run_demo(demo_basic, 1)
+     run_demo(demo_checkpoint, 1)
+     run_demo(demo_model_parallel, 1)

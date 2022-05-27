@@ -17,8 +17,7 @@ class PytorchDDPProvider(Provider):
 
     def _image(self):
         cuda_is_required = self.resources and self.resources.gpu
-        return f"dstackai/python:{self.version}-cuda-11.1.1" if cuda_is_required else f"python:{self.version}"
-        #return "pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime"
+        return f"dstackai/python:{self.version}-cuda-11.1" if cuda_is_required else f"python:{self.version}"
 
     def _commands(self, node_rank):
         commands = ["printenv", "echo $MASTER_HOSTNAME"]
@@ -34,11 +33,11 @@ class PytorchDDPProvider(Provider):
         nodes = self.workflow.data["resources"].get("nodes")
         if node_rank == 0:
             commands.append(
-                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes+1} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
             )
         else:
             commands.append(
-                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes+1} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
                 # --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
             )
         return commands
