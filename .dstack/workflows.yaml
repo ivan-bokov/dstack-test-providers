@@ -6,7 +6,7 @@ workflows:
     script: example.py
     requirements: requirements.txt
     resources:
-      nodes: 2
+      nodes: 1
       cpu: 1
       memory: 1GB
       gpu: 1
