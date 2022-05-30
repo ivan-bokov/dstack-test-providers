@@ -8,7 +8,7 @@ class PytorchDDPProvider(Provider):
     def __init__(self):
         super().__init__(schema="providers/pytorch-ddp/schema.yaml")
         self.script = self.workflow.data["script"]
-        self.version = str(self.workflow.data.get("version") or "3.9")
+        self.python = str(self.workflow.data.get("python") or "3.9")
         self.requirements = self.workflow.data.get("requirements")
         self.environment = self.workflow.data.get("environment") or {}
         self.artifacts = self.workflow.data.get("artifacts")
@@ -17,28 +17,28 @@ class PytorchDDPProvider(Provider):
 
     def _image(self):
         cuda_is_required = self.resources and self.resources.gpu
-        return f"dstackai/python:{self.version}-cuda-11.1" if cuda_is_required else f"python:{self.version}"
+        return f"dstackai/python:{self.python}-cuda-11.1" if cuda_is_required else f"python:{self.python}"
 
     def _commands(self, node_rank):
-        commands = ["printenv", "echo $MASTER_HOSTNAME"]
+        commands = ["printenv"]
         if self.requirements:
             commands.append("pip3 install -r " + self.requirements)
+        environment_init = ""
         if self.environment:
             for name in self.environment:
                 escaped_value = self.environment[name].replace('"', '\\"')
-                commands.append(f"export {name}=\"{escaped_value}\"")
+                environment_init += f"{name}=\"{escaped_value}\" "
         nproc = ""
         if self.resources.gpu:
             nproc = f"--nproc_per_node={self.resources.gpu.count}"
         nodes = self.workflow.data["resources"].get("nodes")
         if node_rank == 0:
             commands.append(
-                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+                f"{environment_init}torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $JOB_HOSTNAME --master_port $JOB_PORT_0 {self.script}"
             )
         else:
             commands.append(
-                f"torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
-                # --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+                f"{environment_init}torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
             )
         return commands
 

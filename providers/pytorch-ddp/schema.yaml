@@ -1,6 +1,8 @@
 type: object
 additionalProperties: false
 properties:
+  python:
+    type: string
   requirements:
     type: string
   script:
