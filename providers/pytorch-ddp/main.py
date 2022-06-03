@@ -55,7 +55,8 @@ class PytorchDDPProvider(Provider):
             working_dir=self.working_dir,
             resources=self.resources,
             artifacts=self.artifacts,
-            ports=[29500]
+            ports=[29500],
+            environment={"NCCL_DEBUG": "INFO"}
         )
         jobs = [masterJob]
         if nodes > 1:
@@ -66,7 +67,7 @@ class PytorchDDPProvider(Provider):
                     working_dir=self.working_dir,
                     resources=self.resources,
                     artifacts=self.artifacts,
-                    ports=[],
+                    environment={"NCCL_DEBUG": "INFO"},
                     master=masterJob
                 ))
         return jobs
