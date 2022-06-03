@@ -66,6 +66,7 @@ class PytorchDDPProvider(Provider):
                     working_dir=self.working_dir,
                     resources=self.resources,
                     artifacts=self.artifacts,
+                    ports=[],
                     master=masterJob
                 ))
         return jobs
