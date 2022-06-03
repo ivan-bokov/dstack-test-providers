@@ -20,7 +20,7 @@ class PytorchDDPProvider(Provider):
         return f"dstackai/python:{self.python}-cuda-11.1" if cuda_is_required else f"python:{self.python}"
 
     def _commands(self, node_rank):
-        commands = ["printenv"]
+        commands = ["printenv", "sysctl net.ipv4.ip_local_port_range"]
         if self.requirements:
             commands.append("pip3 install -r " + self.requirements)
         environment_init = ""
