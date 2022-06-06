@@ -38,7 +38,7 @@ class PytorchDDPProvider(Provider):
             )
         else:
             commands.append(
-                f"{environment_init}torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_HOSTNAME --master_port $MASTER_PORT_0 {self.script}"
+                f"{environment_init}torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_JOB_HOSTNAME --master_port $MASTER_JOB_PORT_0 {self.script}"
             )
         return commands
 
