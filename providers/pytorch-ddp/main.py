@@ -55,7 +55,7 @@ class PytorchDDPProvider(Provider):
             working_dir=self.working_dir,
             resources=self.resources,
             artifacts=self.artifacts,
-            ports=[29500],
+            port_count=1,
             environment={"NCCL_DEBUG": "INFO"}
         )
         jobs = [masterJob]
