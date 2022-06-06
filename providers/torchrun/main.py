@@ -6,7 +6,7 @@ from dstack import Provider, Job
 
 class PytorchDDPProvider(Provider):
     def __init__(self):
-        super().__init__(schema="providers/pytorch-ddp/schema.yaml")
+        super().__init__(schema="providers/torchrun/schema.yaml")
         self.script = self.workflow.data["script"]
         self.python = str(self.workflow.data.get("python") or "3.9")
         self.requirements = self.workflow.data.get("requirements")
@@ -23,22 +23,17 @@ class PytorchDDPProvider(Provider):
         commands = ["printenv", "sysctl net.ipv4.ip_local_port_range"]
         if self.requirements:
             commands.append("pip3 install -r " + self.requirements)
-        environment_init = ""
-        if self.environment:
-            for name in self.environment:
-                escaped_value = self.environment[name].replace('"', '\\"')
-                environment_init += f"{name}=\"{escaped_value}\" "
         nproc = ""
         if self.resources.gpu:
             nproc = f"--nproc_per_node={self.resources.gpu.count}"
         nodes = self.workflow.data["resources"].get("nodes")
         if node_rank == 0:
             commands.append(
-                f"{environment_init}torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $JOB_HOSTNAME --master_port $JOB_PORT_0 {self.script}"
+                f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $JOB_HOSTNAME --master_port $JOB_PORT_0 {self.script}"
             )
         else:
             commands.append(
-                f"{environment_init}torchrun {nproc} --max_restarts=3 --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_JOB_HOSTNAME --master_port $MASTER_JOB_PORT_0 {self.script}"
+                f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_JOB_HOSTNAME --master_port $MASTER_JOB_PORT_0 {self.script}"
             )
         return commands
 
@@ -55,8 +50,8 @@ class PytorchDDPProvider(Provider):
             working_dir=self.working_dir,
             resources=self.resources,
             artifacts=self.artifacts,
+            environment=self.environment,
             port_count=1,
-            environment={"NCCL_DEBUG": "INFO"}
         )
         jobs = [masterJob]
         if nodes > 1:
@@ -67,7 +62,7 @@ class PytorchDDPProvider(Provider):
                     working_dir=self.working_dir,
                     resources=self.resources,
                     artifacts=self.artifacts,
-                    environment={"NCCL_DEBUG": "INFO"},
+                    environment=self.environment,
                     master=masterJob
                 ))
         return jobs

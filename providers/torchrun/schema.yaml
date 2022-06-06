@@ -28,7 +28,3 @@ properties:
     type: array
     items:
       type: string
-  ports:
-    type: array
-    items:
-      type: integer
