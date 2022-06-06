@@ -5,6 +5,8 @@ workflows:
       name: torchrun
     script: example.py
     requirements: requirements.txt
+    environment:
+      NCCL_DEBUG: INFO
     resources:
       nodes: 2
       cpu: 1
