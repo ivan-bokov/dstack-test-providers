@@ -1,7 +1,7 @@
 type: object
 additionalProperties: false
 properties:
-  python:
+  version:
     type: string
   requirements:
     type: string
