@@ -1,6 +1,0 @@
-providers:
-    - name: torchrun
-      image: python:3.9
-      commands:
-        - pip3 install -r providers/torchrun/requirements.txt
-        - PYTHONPATH=providers python3 providers/torchrun/main.py

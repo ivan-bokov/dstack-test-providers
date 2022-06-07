@@ -2,7 +2,7 @@ workflows:
   - name: hello
     provider: 
       repo: https://github.com/ivan-bokov/dstack-test-providers
-      name: torchrun@experimenta
+      name: torchrun@kuku
     script: example.py
     requirements: requirements.txt
     environment:
