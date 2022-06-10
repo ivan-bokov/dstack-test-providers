@@ -6,7 +6,8 @@ workflows:
     environment:
       NCCL_DEBUG: INFO
     resources:
-      nodes: 1
+      nodes: 2
       cpu: 1
       memory: 1GB
+      gpu: 1
 
