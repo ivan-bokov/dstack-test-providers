@@ -9,7 +9,7 @@ class PytorchDDPProvider(Provider):
     def __init__(self):
         super().__init__(schema="providers/torchrun/schema.yaml")
         self.script = self.workflow.data["script"] or self.workflow.data["file"]
-        self.version = str(self.workflow.data.get("version") or "3.10")
+        self.version = str(self.workflow.data.get("version") or "3.9")
         self.requirements = self.workflow.data.get("requirements")
         self.environment = self.workflow.data.get("environment") or {}
         self.artifacts = self.workflow.data.get("artifacts")
