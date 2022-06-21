@@ -9,7 +9,7 @@ class PytorchDDPProvider(Provider):
     def __init__(self):
         super().__init__(schema="providers/torchrun/schema.yaml")
         self.script = self.workflow.data["script"] or self.workflow.data["file"]
-        self.version = str(self.workflow.data.get("version") or "3.9")
+        self.version = str(self.workflow.data.get("version") or "3.10")
         self.requirements = self.workflow.data.get("requirements")
         self.environment = self.workflow.data.get("environment") or {}
         self.artifacts = self.workflow.data.get("artifacts")
@@ -52,7 +52,7 @@ class PytorchDDPProvider(Provider):
                 sys.exit("resources.nodes in workflows.yaml should be an integer")
             if int(self.workflow.data["resources"]["nodes"]) > 1:
                 nodes = int(self.workflow.data["resources"]["nodes"])
-        masterJob = Job(
+        master_job = Job(
             image=self._image(),
             commands=self._commands(0),
             working_dir=self.working_dir,
@@ -61,7 +61,7 @@ class PytorchDDPProvider(Provider):
             environment=self.environment,
             port_count=1,
         )
-        jobs = [masterJob]
+        jobs = [master_job]
         if nodes > 1:
             for i in range(nodes - 1):
                 jobs.append(Job(
@@ -70,7 +70,7 @@ class PytorchDDPProvider(Provider):
                     working_dir=self.working_dir,
                     resources=self.resources,
                     environment=self.environment,
-                    master=masterJob
+                    master=master_job
                 ))
         return jobs
     def parse_args(self):
