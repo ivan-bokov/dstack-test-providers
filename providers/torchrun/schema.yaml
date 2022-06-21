@@ -27,6 +27,8 @@ properties:
   resources:
     type: object
     properties:
+      nodes:
+        type: integer
       cpu:
         type: integer
       memory:
