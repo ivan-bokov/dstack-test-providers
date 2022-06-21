@@ -1,6 +1,8 @@
 workflows:
   - name: hello
-    provider: torchrun@experimental
+    provider:
+      name: torchrun
+      repo: https://github.com/ivan-bokov/dstack-test-providers
     script: example.py
     requirements: requirements.txt
     environment:
