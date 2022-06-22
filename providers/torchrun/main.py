@@ -22,7 +22,7 @@ class PytorchDDPProvider(Provider):
         return f"dstackai/python:{self.version}-cuda-11.1" if cuda_is_required else f"python:{self.version}"
 
     def _commands(self, node_rank):
-        commands = []
+        commands = ["nvidia-smi"]
         if self.requirements:
             commands.append("pip3 install -r " + self.requirements)
         nproc = ""
