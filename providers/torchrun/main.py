@@ -22,7 +22,7 @@ class PytorchDDPProvider(Provider):
         return f"dstackai/python:{self.version}-cuda-11.1" if cuda_is_required else f"python:{self.version}"
 
     def _commands(self, node_rank):
-        commands = ["nvidia-smi"]
+        commands = []
         if self.requirements:
             commands.append("pip3 install -r " + self.requirements)
         nproc = ""
@@ -35,13 +35,14 @@ class PytorchDDPProvider(Provider):
                 args_init += " " + self.args
             if isinstance(self.args, list):
                 args_init += " " + ",".join(map(lambda arg: "\"" + arg.replace('"', '\\"') + "\"", self.args))
+        torchrun_command = f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank}"
         if node_rank == 0:
             commands.append(
-                f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $JOB_HOSTNAME --master_port $JOB_PORT_0 {self.script} {args_init}"
+                f"{torchrun_command} --master_addr $JOB_HOSTNAME --master_port $JOB_PORT_0 {self.script} {args_init}"
             )
         else:
             commands.append(
-                f"torchrun {nproc} --nnodes={nodes} --node_rank={node_rank} --master_addr $MASTER_JOB_HOSTNAME --master_port $MASTER_JOB_PORT_0 {self.script} {args_init}"
+                f"{torchrun_command} --master_addr $MASTER_JOB_HOSTNAME --master_port $MASTER_JOB_PORT_0 {self.script} {args_init}"
             )
         return commands
 
@@ -73,6 +74,7 @@ class PytorchDDPProvider(Provider):
                     master=master_job
                 ))
         return jobs
+
     def parse_args(self):
         parser = ArgumentParser(prog="dstack run python")
         if not self.workflow.data.get("workflow_name"):
