@@ -1,5 +1,4 @@
 from typing import List, Optional
-import sys
 from argparse import ArgumentParser
 import argparse
 
