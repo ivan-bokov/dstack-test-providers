@@ -2,11 +2,11 @@ workflows:
   - name: hello
     provider: torchrun
     script: example.py
+    nodes: 2
     requirements: requirements.txt
     environment:
       NCCL_DEBUG: INFO
     resources:
-      nodes: 2
       cpu: 1
       memory: 1GB
       gpu: 1
